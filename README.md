@@ -41,3 +41,49 @@ The main objectives of this project are to:
 * Gradually extend the project toward a more complete PostgreSQL database implementation
 
 ---
+
+### Main Tables
+
+| Table         | Description                                            |
+| ------------- | ------------------------------------------------------ |
+| `customers`   | Stores customer information and location details       |
+| `categories`  | Stores product categories                              |
+| `products`    | Stores product information, pricing, and stock         |
+| `orders`      | Stores customer orders and order totals                |
+| `order_items` | Stores products and quantities belonging to each order |
+| `ChangeLog`   | Stores database operation audit records                |
+
+The schema uses primary keys, foreign keys, unique constraints, `NOT NULL` constraints, identity columns, and default values.
+
+---
+
+# SQL Analysis
+
+The project contains a dedicated collection of SQL queries covering different aspects of the retail database.
+
+Rather than duplicating those questions in this README, the complete documentation is maintained separately in:
+
+```text
+Business_Questions/
+└── BUSINESS_QUESTIONS.md
+```
+
+That file contains the business questions addressed by the project and explains the purpose of each analysis.
+
+The analytical SQL covers areas such as:
+
+* Customer purchasing behavior
+* Product sales performance
+* Customer spending
+* Order analysis
+* Product popularity
+* Category-level analysis
+* Inventory availability
+* Monthly order activity
+* Customer distribution
+* High-value orders
+
+---
+
+
+
