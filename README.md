@@ -86,4 +86,116 @@ The analytical SQL covers areas such as:
 ---
 
 
+# SQL Skills Demonstrated
 
+This project provides practical experience with several important SQL concepts.
+
+### Basic SQL
+
+* `SELECT`
+* `WHERE`
+* `ORDER BY`
+* `LIMIT`
+* `DISTINCT`
+
+### Aggregation
+
+* `SUM()`
+* `AVG()`
+* `COUNT()`
+* `MAX()`
+* `GROUP BY`
+* `HAVING`
+
+### Joins
+
+* `INNER JOIN`
+* `LEFT JOIN`
+* Multi-table joins
+* Relational data analysis
+
+### Date & Time Functions
+
+* `CURRENT_TIMESTAMP`
+* `INTERVAL`
+* `EXTRACT()`
+* `DATE_TRUNC()`
+
+### Advanced SQL
+
+* Subqueries
+* Window functions
+* `RANK()`
+* Correlated query concepts
+* Aggregation across multiple related tables
+
+The project uses window functions such as `RANK()` to perform category-level product analysis.
+
+---
+
+# Database Auditing
+
+A major technical component of this project is the implementation of a database audit system.
+
+A dedicated `ChangeLog` table records database changes:
+
+```text
+ChangeLog
+├── log_id
+├── table_name
+├── operation
+├── record_id
+├── change_date
+└── changed_by
+```
+
+This provides a basic history of changes made to important database tables.
+
+## Trigger-Based Audit Logging
+
+PostgreSQL `PL/pgSQL` trigger functions are used to capture:
+
+* `INSERT`
+* `UPDATE`
+* `DELETE`
+
+operations.
+
+Audit triggers have been implemented across:
+
+* `products`
+* `customers`
+* `orders`
+* `categories`
+* `order_items`
+
+This part of the project helped me understand how database triggers can automatically execute logic when data changes occur.
+
+---
+
+# Indexing & Query Performance
+
+The project also includes an introduction to PostgreSQL query-performance analysis.
+
+The performance section explores:
+
+* Existing database indexes
+* Creating indexes on selected columns
+* `EXPLAIN ANALYZE`
+* Query execution plans
+* Table clustering using `CLUSTER`
+
+For example:
+
+```sql
+CREATE INDEX idx_customers_country
+ON customers(country);
+```
+
+An index was also created on `products.category_id` for category-based filtering.
+
+The project uses `EXPLAIN ANALYZE` to inspect how PostgreSQL executes queries before and after indexing.
+
+> **Note:** This is a learning and portfolio project using a relatively small dataset. The performance section demonstrates the process of investigating query execution rather than claiming production-scale performance improvements.
+
+---
