@@ -1,6 +1,6 @@
 # Business Questions Solved
 
-This project uses SQL to analyze an online retail database and answer practical business questions related to customers, orders, products, sales, inventory, categories, database auditing, and performance optimization.
+This project uses SQL to analyze an online retail database and answer practical business questions related to customers, orders, products, sales, inventory, categories, database auditing, and performance optimizations.
 
 ---
 
@@ -314,6 +314,4 @@ The project covers the following areas:
 | Performance | Indexing, EXPLAIN ANALYZE, CLUSTER |
 | Advanced SQL | Window functions, subqueries, aggregations |
 
----
-
-
+--- 
