@@ -199,3 +199,18 @@ The project uses `EXPLAIN ANALYZE` to inspect how PostgreSQL executes queries be
 > **Note:** This is a learning and portfolio project using a relatively small dataset. The performance section demonstrates the process of investigating query execution rather than claiming production-scale performance improvements.
 
 ---
+
+# Technologies Used
+
+| Technology              | Purpose                                   |
+| ----------------------- | ----------------------------------------- |
+| **PostgreSQL**          | Relational database management system     |
+| **SQL**                 | Data querying and analysis                |
+| **PL/pgSQL**            | Trigger functions and database-side logic |
+| **PostgreSQL Triggers** | Automated audit logging                   |
+| **Indexes**             | Query performance exploration             |
+| **EXPLAIN ANALYZE**     | Query execution analysis                  |
+| **CLUSTER**             | Table organization experiment             |
+| **Git / GitHub**        | Version control and project portfolio     |
+
+## The implemented SQL specifically
