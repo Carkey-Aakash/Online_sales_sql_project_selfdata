@@ -9,7 +9,7 @@
 
 This project is an **intermediate-level PostgreSQL database project** built around an online retail business.
 
-The project focuses on more than writing SQL queries. It covers the development of a relational database, analytical SQL, database-level automation, audit logging, and basic query-performance analysis.
+The project focuses on more than writing SQL queries. It covers the development of a relational database, analytical SQL, database-level automation, audit logging, SQL Views and basic query-performance analysis.
 
 The database models key components of an online retail system, including:
 
@@ -21,7 +21,7 @@ The database models key components of an online retail system, including:
 
 The project also includes a separate set of documented **business questions** that demonstrate how SQL can be used to extract useful information from the database.
 
-The implementation is currently **in progress**. The core database and analytical components have been completed, while **SQL Views and Role-Based Access Control (RBAC)** are the next major development steps.
+The implementation is currently **in progress**. The core database and analytical components have been completed, while Role-Based Access Control (RBAC)** is the next major development steps.
 
 ---
 
@@ -37,6 +37,7 @@ The main objectives of this project are to:
 * Practice joins, aggregations, subqueries, and window functions
 * Implement database auditing using triggers
 * Explore PostgreSQL indexing and query execution plans
+* Create reusable SQL Views for commonly used data analysis
 * Learn how database-level permissions and access control work
 * Gradually extend the project toward a more complete PostgreSQL database implementation
 
@@ -126,8 +127,14 @@ This project provides practical experience with several important SQL concepts.
 * Subqueries
 * Window functions
 * `RANK()`
+* `ROW_NUMBER()`
+* Common Table Expressions (CTEs)
 * Correlated query concepts
 * Aggregation across multiple related tables
+* SQL Views
+
+The project uses window functions such as `RANK()` and `ROW_NUMBER()` to perform category-level and customer-level analysis.
+
 
 The project uses window functions such as `RANK()` to perform category-level product analysis.
 
@@ -199,6 +206,51 @@ The project uses `EXPLAIN ANALYZE` to inspect how PostgreSQL executes queries be
 > **Note:** This is a learning and portfolio project using a relatively small dataset. The performance section demonstrates the process of investigating query execution rather than claiming production-scale performance improvements.
 
 ---
+# Database Views
+
+The project also includes reusable PostgreSQL **Views** to simplify frequently used queries and provide convenient access to commonly analyzed data.
+
+## Views Created
+
+### `vw_product_details`
+
+This view combines product information with the corresponding category name.
+
+It provides:
+
+* Product ID
+* Product name
+* Price
+* Stock
+* Category name
+
+This makes it easier to retrieve product information together with its category without repeatedly writing the same join.
+
+### `vw_customer_orders`
+
+This view provides a summary of customer ordering activity.
+
+It includes:
+
+* Customer ID
+* First name
+* Last name
+* Phone
+* Address
+* Total number of orders
+* Total amount spent
+
+This view provides a reusable source for customer purchasing analysis.
+
+### `vw_recent_orders`
+
+This view retrieves orders placed within the last 35 days.
+
+It can be reused for analyzing recent order activity and applying additional filters to recent orders.
+
+## The SQL file also includes additional analytical queries based on these views, including product/category analysis, customer order and spending analysis, recent high-value orders, latest orders per customer, category sales, low-stock products, and recent product sales.
+
+---
 
 # Technologies Used
 
@@ -208,9 +260,11 @@ The project uses `EXPLAIN ANALYZE` to inspect how PostgreSQL executes queries be
 | **SQL**                 | Data querying and analysis                |
 | **PL/pgSQL**            | Trigger functions and database-side logic |
 | **PostgreSQL Triggers** | Automated audit logging                   |
+| **SQL Views**           | Reusable queries and summarized data      |
 | **Indexes**             | Query performance exploration             |
 | **EXPLAIN ANALYZE**     | Query execution analysis                  |
 | **CLUSTER**             | Table organization experiment             |
 | **Git / GitHub**        | Version control and project portfolio     |
+
 
 ## The implemented SQL specifically
