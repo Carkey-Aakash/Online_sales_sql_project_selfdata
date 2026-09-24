@@ -252,6 +252,79 @@ Explore indexing and query performance optimization in PostgreSQL.
 
 ---
 
+## 24. Database Views
+
+**Technical Objective:**
+Create reusable PostgreSQL views to simplify complex queries, provide summarized data, and make frequently used information easier to access.
+
+**Views Created:**
+
+### `vw_product_details`
+
+A view that combines product information with its corresponding category name.
+
+**Includes:**
+
+* Product ID
+* Product name
+* Price
+* Stock
+* Category name
+
+This view simplifies queries that require product and category information together.
+
+---
+
+### `vw_customer_orders`
+
+A view that provides a summary of customer ordering activity.
+
+**Includes:**
+
+* Customer ID
+* First name
+* Last name
+* Phone
+* Address
+* Total number of orders
+* Total amount spent
+
+This view can be used to analyze customer purchasing activity without repeatedly writing the same joins and aggregate calculations.
+
+---
+
+### `vw_recent_orders`
+
+A view that retrieves orders placed within the last 35 days.
+
+This view can be reused for analyzing recent order activity and filtering orders based on different conditions.
+
+---
+
+**View-Based Queries Added:**
+
+The project also includes additional queries using the created views, covering:
+
+* Retrieving all products with category names
+* Finding products within a specific price range
+* Counting products in each category
+* Finding customers with more than one order
+* Retrieving total spending by customer
+* Finding recent orders above a specific amount
+* Retrieving the latest order for each customer
+* Retrieving products from a specific category
+* Calculating total sales for each category
+* Retrieving customer orders with product details
+* Finding top 5 customers by total spending
+* Finding products with low stock
+* Retrieving orders from the last 15 days
+* Retrieving products sold in the last month
+
+These additional queries demonstrate how views can be used as reusable data sources for further analysis.
+
+---
+
+
 # SQL Concepts Demonstrated
 
 This project demonstrates practical use of:
