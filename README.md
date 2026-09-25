@@ -136,8 +136,6 @@ This project provides practical experience with several important SQL concepts.
 The project uses window functions such as `RANK()` and `ROW_NUMBER()` to perform category-level and customer-level analysis.
 
 
-The project uses window functions such as `RANK()` to perform category-level product analysis.
-
 ---
 
 # Database Auditing
