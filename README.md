@@ -359,6 +359,22 @@ SELECT
 Permissions for different tables and operations are checked using `has_table_privilege()`.
 
 ---
+# Backup & Restore
+
+Database backup and restore was also practiced using PostgreSQL/pgAdmin.
+
+The project includes experience with:
+
+* Creating a database backup
+* Choosing backup formats
+* Restoring a PostgreSQL database
+* Restoring from a `.sql` backup
+* Understanding the difference between SQL-script backups and archive-based backups
+
+The backup and restore process was used to verify that the database can be recreated from a backup.
+
+---
+
 
 
 # Technologies Used
