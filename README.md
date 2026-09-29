@@ -5,14 +5,16 @@
 ![PL%2FpgSQL](https://img.shields.io/badge/PL%2FpgSQL-Triggers-purple)
 ![Database%20Auditing](https://img.shields.io/badge/Database-Auditing-red)
 ![RBAC](https://img.shields.io/badge/Security-RBAC-green)
+![Backup%20%26%20Restore](https://img.shields.io/badge/Backup%20%26%20Restore-blue)
 ![Project Status](https://img.shields.io/badge/Status-Completed-success)
+
 
 
 ## Overview
 
 This project is an **intermediate-level PostgreSQL database project** built around an online retail business.
 
-The project focuses on more than writing SQL queries. It covers the development of a relational database, analytical SQL, database-level automation, audit logging, SQL Views and basic query-performance analysis.
+The project goes beyond basic SQL queries and covers the complete process of building and working with a relational database, including database design, data analysis, database auditing, SQL Views, indexing, query-performance analysis, Role-Based Access Control (RBAC), and database backup and restore.
 
 The database models key components of an online retail system, including:
 
@@ -21,10 +23,10 @@ The database models key components of an online retail system, including:
 * Categories
 * Orders
 * Order Items
+* ChangeLog for database auditing
 
-The project also includes a separate set of documented **business questions** that demonstrate how SQL can be used to extract useful information from the database.
+The project also contains a collection of practical **business questions and SQL queries** that demonstrate how SQL can be used to analyze retail data and answer common business problems.
 
-The implementation is currently **in progress**. The core database and analytical components have been completed, while Role-Based Access Control (RBAC)** is the next major development steps.
 
 ---
 
@@ -125,6 +127,7 @@ This project provides practical experience with several important SQL concepts.
 ### Date & Time Functions
 
 * `CURRENT_TIMESTAMP`
+* `CURRENT_DATE`
 * `INTERVAL`
 * `EXTRACT()`
 * `DATE_TRUNC()`
@@ -163,9 +166,27 @@ ChangeLog
 
 This provides a basic history of changes made to important database tables.
 
+# Database Auditing
+
+A database auditing system was implemented using PostgreSQL **PL/pgSQL trigger functions**.
+
+A dedicated `ChangeLog` table records database operations:
+
+```text
+ChangeLog
+├── log_id
+├── table_name
+├── operation
+├── record_id
+├── change_date
+└── changed_by
+```
+
+The `changed_by` field uses the PostgreSQL `CURRENT_USER` value in several audit functions to identify the database user performing the operation.
+
 ## Trigger-Based Audit Logging
 
-PostgreSQL `PL/pgSQL` trigger functions are used to capture:
+Triggers and PL/pgSQL functions were implemented for:
 
 * `INSERT`
 * `UPDATE`
@@ -173,7 +194,7 @@ PostgreSQL `PL/pgSQL` trigger functions are used to capture:
 
 operations.
 
-Audit triggers have been implemented across:
+Auditing was practiced across:
 
 * `products`
 * `customers`
@@ -181,45 +202,17 @@ Audit triggers have been implemented across:
 * `categories`
 * `order_items`
 
-This part of the project helped me understand how database triggers can automatically execute logic when data changes occur.
+For example, product changes are automatically recorded in the `ChangeLog` table when the corresponding triggers execute.
 
----
-
-# Indexing & Query Performance
-
-The project also includes an introduction to PostgreSQL query-performance analysis.
-
-The performance section explores:
-
-* Existing database indexes
-* Creating indexes on selected columns
-* `EXPLAIN ANALYZE`
-* Query execution plans
-* Table clustering using `CLUSTER`
-
-For example:
-
-```sql
-CREATE INDEX idx_customers_country
-ON customers(country);
-```
-
-An index was also created on `products.category_id` for category-based filtering.
-
-The project uses `EXPLAIN ANALYZE` to inspect how PostgreSQL executes queries before and after indexing.
-
-> **Note:** This is a learning and portfolio project using a relatively small dataset. The performance section demonstrates the process of investigating query execution rather than claiming production-scale performance improvements.
-
+This helped demonstrate how PostgreSQL triggers can automatically execute database-side logic when data changes occur.
 ---
 # Database Views
 
-The project also includes reusable PostgreSQL **Views** to simplify frequently used queries and provide convenient access to commonly analyzed data.
+The project includes reusable PostgreSQL **Views** for simplifying frequently used queries and analysis.
 
-## Views Created
+## `vw_product_details`
 
-### `vw_product_details`
-
-This view combines product information with the corresponding category name.
+Combines product information with category information.
 
 It provides:
 
@@ -229,11 +222,15 @@ It provides:
 * Stock
 * Category name
 
-This makes it easier to retrieve product information together with its category without repeatedly writing the same join.
+```sql
+SELECT * FROM vw_product_details;
+```
 
-### `vw_customer_orders`
+---
 
-This view provides a summary of customer ordering activity.
+## `vw_customer_orders`
+
+Provides a summary of customer ordering activity.
 
 It includes:
 
@@ -245,15 +242,51 @@ It includes:
 * Total number of orders
 * Total amount spent
 
-This view provides a reusable source for customer purchasing analysis.
+The view calculates customer totals using order items and their quantities and prices.
 
-### `vw_recent_orders`
+---
 
-This view retrieves orders placed within the last 35 days.
+## `vw_recent_orders`
 
-It can be reused for analyzing recent order activity and applying additional filters to recent orders.
+Provides orders placed within the last **35 days**.
 
-## The SQL file also includes additional analytical queries based on these views, including product/category analysis, customer order and spending analysis, recent high-value orders, latest orders per customer, category sales, low-stock products, and recent product sales.
+```sql
+SELECT * FROM vw_recent_orders;
+```
+
+This view can then be used with additional filters for recent-order analysis.
+
+---
+
+# Indexing & Query Performance
+
+The project also explores PostgreSQL query-performance concepts.
+
+The performance section covers:
+
+* Existing database indexes
+* Creating indexes
+* Primary-key indexes
+* Unique indexes
+* `EXPLAIN ANALYZE`
+* Query execution plans
+* Table clustering using `CLUSTER`
+
+For example:
+
+```sql
+CREATE INDEX idx_customers_country
+ON customers(country);
+```
+
+An index was also created on `products.category_id`:
+
+```sql
+CREATE INDEX idx_products_category_id
+ON products(category_id);
+```
+
+The project uses `EXPLAIN ANALYZE` to inspect how PostgreSQL executes queries before and after indexing.
 
 ---
 
