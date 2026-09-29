@@ -2,8 +2,11 @@
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue?logo=postgresql)
 ![SQL](https://img.shields.io/badge/SQL-Analysis-orange)
-![PL/pgSQL](https://img.shields.io/badge/PL%2FpgSQL-Triggers-purple)
-![Project Status](https://img.shields.io/badge/Status-In%20Progress-yellow)
+![PL%2FpgSQL](https://img.shields.io/badge/PL%2FpgSQL-Triggers-purple)
+![Database%20Auditing](https://img.shields.io/badge/Database-Auditing-red)
+![RBAC](https://img.shields.io/badge/Security-RBAC-green)
+![Project Status](https://img.shields.io/badge/Status-Completed-success)
+
 
 ## Overview
 
@@ -29,17 +32,21 @@ The implementation is currently **in progress**. The core database and analytica
 
 The main objectives of this project are to:
 
-* Design a relational PostgreSQL database
+* Design a relational PostgreSQL database for an online retail system
 * Establish relationships between related entities
-* Apply database constraints for data integrity
+* Apply database constraints to maintain data integrity
 * Load and work with sample retail data
-* Perform business-oriented data analysis using SQL
+* Solve practical business questions using SQL
 * Practice joins, aggregations, subqueries, and window functions
-* Implement database auditing using triggers
+* Use Common Table Expressions (CTEs)
+* Implement database auditing using PL/pgSQL functions and triggers
+* Create reusable SQL Views for frequently used analysis
 * Explore PostgreSQL indexing and query execution plans
-* Create reusable SQL Views for commonly used data analysis
-* Learn how database-level permissions and access control work
-* Gradually extend the project toward a more complete PostgreSQL database implementation
+* Understand table clustering and physical data organization
+* Implement database roles and permissions
+* Practice `GRANT` and `REVOKE`
+* Explore column-level access control
+* Demonstrate Role-Based Access Control (RBAC)
 
 ---
 
