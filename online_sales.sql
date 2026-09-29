@@ -1363,7 +1363,7 @@ LOGIN
 PASSWORD 'strongpassword';
 
 -- STEP 2: Allow user to connect to database
-GRANT CONNECT ON DATABASE "OnlineRetailDB_Test"
+GRANT CONNECT ON DATABASE "onlineretaildb"
 TO sales_user
 
 -- step 3: create permission role
@@ -1543,7 +1543,7 @@ TO finance_manager_role;
 CREATE ROLE backup_operator_role;
 
 GRANT CONNECT
-ON DATABASE "OnlineRetailDB_Test"
+ON DATABASE "onlineretaildb"
 TO backup_operator_role;
 
 -- Scenario 11 — Restricted Read Access
@@ -1583,7 +1583,7 @@ PASSWORD 'strong';
 
 
 GRANT CONNECT
-ON DATABASE "OnlineRetailDB_Test"
+ON DATABASE "onlineretaildb"
 TO application_role;
 
 GRANT USAGE ON SCHEMA PUBLIC 
