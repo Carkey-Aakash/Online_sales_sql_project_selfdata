@@ -1152,3 +1152,443 @@ EXPLAIN ANALYZE
 SELECT *
 FROM products
 WHERE category_id = 1;
+
+/*
+===============================
+Implementing Views
+===============================
+
+	Views are virtual tables that represent the result of a query. 
+	They can simplify complex queries and enhance security by restricting access to specific data.
+
+*/
+
+-- View for Product Details: A view combining product details with category names.
+CREATE VIEW vw_product_details AS 
+SELECT 
+p.product_id,
+p.product_name,
+p.price,
+p.stock,
+c.category_name
+FROM products p 
+JOIN categories c 
+	ON p.category_id = c.category_id
+	
+
+-- displaying  everything from current view
+SELECT * FROM vw_product_details;
+
+-- View for Customer Orders : A view to get a summary of orders placed by each customer.
+CREATE VIEW vw_customer_orders AS
+SELECT c.customer_id,
+c.first_name,
+c.last_name,
+c.phone,
+c.address,
+COUNT(DISTINCT o.order_id) as total_orders,
+SUM(oi.quantity*oi.price) as total_amount
+FROM customers c 
+JOIN orders o 
+	ON c.customer_id = o.customer_id
+JOIN order_items oi 
+	on o.order_id = oi.order_id
+GROUP BY c.customer_id, c.first_name, c.last_name
+ORDER BY total_amount DESC 
+
+-- DISPLAYING 
+SELECT * FROM vw_customer_orders;
+
+
+-- View for Recent Orders: A view to display orders placed in the last 35 days.
+CREATE VIEW vw_recent_orders AS
+SELECT * FROM orders
+WHERE order_date > CURRENT_DATE - INTERVAL '35 days';
+
+-- DISPLAYING 
+SELECT * FROM vw_recent_orders;
+
+--Query 31: Retrieve All Products with Category Names
+--Using the vw_ProductDetails view to get a list of all products along with their category names.
+SELECT * FROM vw_product_details;
+
+--Query 32: Retrieve Products within a Specific Price Range
+--Using the vw_ProductDetails view to find products priced between 5000 and 50000.
+SELECT * FROM vw_product_details 
+WHERE price BETWEEN 5000 and 50000;
+
+
+--Query 33: Count the Number of Products in Each Category
+--Using the vw_ProductDetails view to count the number of products in each category.
+SELECT category_name,
+COUNT(*)  AS total_products
+FROM vw_product_details
+GROUP BY category_name
+ORDER BY total_products DESC;
+
+--Query 34: Retrieve Customers with More Than 1 Orders
+--Using the vw_CustomerOrders view to find customers who have placed more than 1 orders.
+
+SELECT
+customer_id,
+first_name
+FROM vw_customer_orders
+WHERE total_orders > 1;
+
+
+--Query 35: Retrieve the Total Amount Spent by Each Customer
+--Using the vw_CustomerOrders view to get the total amount spent by each customer.
+SELECT 
+first_name,last_name,total_amount
+FROM  vw_customer_orders
+ORDER BY total_amount DESC;
+
+--Query 36: Retrieve Recent Orders Above a Certain Amount
+--Using the vw_RecentOrders view to find recent orders where the total amount is greater than 10000.
+SELECT * FROM vw_recent_orders
+WHERE total_amount >10000
+ORDER BY total_amount DESC;
+
+--Query 37: Retrieve the Latest Order for Each Customer
+--Using the vw_RecentOrders view to find the latest order placed by each customer.
+with latest_order as
+(
+
+SELECT customer_id,
+order_id,
+order_date,
+total_amount,
+ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date DESC) as rank
+FROM vw_recent_orders
+)
+
+SELECT customer_id,
+order_id,
+order_date,
+total_amount FROM latest_order 
+WHERE rank = 1
+ORDER BY total_amount DESC
+
+--Query 38: Retrieve Products in a Specific Category
+--Using the vw_ProductDetails view to get all products in a specific category, such as 'Electronics'.
+SELECT * FROM  vw_product_details 
+WHERE category_name = 'Electronics'
+
+
+--Query 39: Retrieve Total Sales for Each Category
+--Using the vw_ProductDetails and order_items  to calculate the total sales for each category.
+SELECT 
+pd.category_name,
+SUM(oi.quantity * oi.price) as total_amount
+FROM order_items oi 
+JOIN vw_product_details pd
+	ON oi.product_id = pd.product_id
+GROUP BY pd.category_name
+ORDER BY total_amount DESC;
+
+
+--Query 40: Retrieve Customer Orders with Product Details
+--Using the vw_CustomerOrders and vw_ProductDetails views to get customer orders along with the details
+SELECT 
+    co.customer_id,
+    co.first_name,
+    co.last_name,
+    o.order_id,
+    o.order_date,
+    pd.product_id,
+    pd.product_name,
+    oi.quantity,
+    oi.price,
+    pd.stock,
+    pd.category_name,
+    (oi.quantity * oi.price) AS product_total
+FROM orders o
+JOIN order_items oi
+    ON o.order_id = oi.order_id
+JOIN vw_customer_orders co
+    ON co.customer_id = o.customer_id
+JOIN vw_product_details pd
+    ON pd.product_id = oi.product_id
+ORDER BY co.customer_id, o.order_date DESC;
+
+
+--Query 41: Retrieve Top 5 Customers by Total Spending
+--Using the vw_CustomerOrders view to find the top 5 customers based on their total spending.
+SELECT 
+customer_id,
+first_name,
+total_amount
+FROM vw_customer_orders
+ORDER BY total_amount DESC
+LIMIT 5 
+
+--Query 42: Retrieve Products with Low Stock
+--Using the vw_ProductDetails view to find products with stock below a certain threshold, such as 10 units.
+SELECT * FROM vw_product_details
+WHERE stock < 10;
+
+--Query 43: Retrieve Orders Placed in the Last 15 Days
+--Using the vw_RecentOrders view to find orders placed in the last 15 days.
+
+SELECT * FROM vw_recent_orders
+WHERE order_date > CURRENT_DATE - INTERVAL '15 days'
+
+--Query 44: Retrieve Products Sold in the Last Month
+--Using the vw_RecentOrders view to find products sold in the last month.
+
+SELECT 
+    rc.order_id,
+    p.product_id,
+    p.product_name,
+    oi.quantity,
+    oi.price
+FROM vw_recent_orders rc
+JOIN order_items oi 
+    ON oi.order_id = rc.order_id
+JOIN products p 
+    ON p.product_id = oi.product_id
+WHERE rc.order_date > CURRENT_DATE - INTERVAL '30 days';
+
+
+/*
+=========================================================
+Implementing Security / Role-Based Access Control (RBAC)
+=========================================================
+
+			
+*/
+-- STEP 1: Create Login/User
+CREATE ROLE sales_user
+LOGIN
+PASSWORD 'strongpassword';
+
+-- STEP 2: Allow user to connect to database
+GRANT CONNECT ON DATABASE "OnlineRetailDB_Test"
+TO sales_user
+
+-- step 3: create permission role
+CREATE ROLE sale_role;
+
+-- STEP 4: ALLOW role to_use PUBLIC schema 
+GRANT USAGE ON SCHEMA PUBLIC
+TO sale_role;
+
+-- STEP 5 : GIVE SELECT PERMISSION ON CUSTOMERS 
+GRANT SELECT
+ON TABLE customers
+TO sale_role;
+
+-- STEP 6 : ADD sale_user to sale_role
+GRANT sale_role
+TO sales_user
+
+--- further steps adding some permission on others table
+-- GIVING INSERT AND UPDATE operation on orders table
+GRANT INSERT 
+ON TABLE orders
+TO sale_role;
+
+GRANT UPDATE 
+ON TABLE orders
+TO sale_role;
+
+-- GIVING SELECT OPERATION ON products table
+
+GRANT SELECT 
+ON TABLE products
+TO sale_role
+
+-- GIVING INSERT OPERATION ON ChangeLog --
+GRANT INSERT
+ON TABLE ChangeLog
+TO sale_role;
+
+-- REVOKING UPDATE FROM ORDERS TABLE
+REVOKE UPDATE 
+ON TABLE orders
+FROM sale_role;
+
+
+-- Check all the permissions I've been practicing
+SELECT
+    has_table_privilege(current_user, 'public.customers', 'SELECT') AS customers_select,
+    has_table_privilege(current_user, 'public.orders', 'INSERT') AS orders_insert,
+    has_table_privilege(current_user, 'public.orders', 'UPDATE') AS orders_update,
+    has_table_privilege(current_user, 'public.products', 'SELECT') AS products_select,
+    has_table_privilege(current_user, 'public.changelog', 'INSERT') AS changelog_insert;
+
+
+/*
+1. Create Login Roles: Create roles with LOGIN and passwords to authenticate users.
+2. Grant Database Access: Allow login roles to connect to the required database.
+3. Create Permission Roles: Create roles to group users with similar permissions.
+4. Assign Users to Roles: Grant permission roles to login roles.
+5. Grant Permissions: Grant SELECT, INSERT, UPDATE, etc. to permission roles.
+6. Revoke Permissions: Remove specific permissions using REVOKE.
+7. View Effective Permissions: Check users' effective table permissions using PostgreSQL privilege functions or information_schema.
+*/
+
+-- CHECKING DIFFERENT SCENARIO  OF ACCESS CONTROL --
+-- Scenario 1 — Read-only access to all tables
+
+CREATE ROLE readonly_role;
+GRANT USAGE ON SCHEMA public
+TO readonly_role;
+
+GRANT SELECT 
+ON ALL TABLES IN SCHEMA public
+TO readonly_role
+
+-- SCENARIO 2 - Data Entry Clerk
+-- Insert only into categories and order_items
+CREATE ROLE data_entry_role;
+
+GRANT USAGE ON SCHEMA public
+TO data_entry_role;
+
+GRANT INSERT 
+ON TABLE categories
+TO data_entry_role;
+
+GRANT INSERT 
+ON TABLE order_items
+TO data_entry_role;
+
+-- Scenario 3 — Product Manager
+-- Full CRUD access to products and categories:
+--since we have to give same access on both table so instead of writing separate writing in same one.
+CREATE ROLE product_manager_role;
+
+GRANT USAGE ON SCHEMA public 
+TO  product_manager_role;
+
+GRANT SELECT,INSERT,UPDATE,DELETE
+ON TABLE categories,products
+TO product_manager_role;
+
+-- Scenario 4 — Order Processor
+-- Read and update orders:
+
+CREATE ROLE order_processor_role;
+
+GRANT USAGE ON SCHEMA public 
+TO order_processor_role;
+
+GRANT SELECT,UPDATE
+ON TABLE orders
+TO order_processor_role;
+
+-- Scenario 5 — Customer Support
+-- Read customers and orders:
+
+CREATE ROLE customer_support_role;
+
+GRANT USAGE ON SCHEMA PUBLIC 
+TO customer_support_role;
+
+GRANT SELECT 
+ON TABLE orders,customers
+TO customer_support_role;
+
+
+-- Scenario 6 — Marketing Analyst
+-- Read-only access to all tables:
+
+CREATE ROLE marketing_analyst_role;
+
+GRANT USAGE ON SCHEMA PUBLIC
+TO marketing_analyst_role;
+
+GRANT SELECT
+ON ALL TABLES IN SCHEMA PUBLIC
+TO marketing_analyst_role;
+
+--  Scenario 7 — Sales Analyst
+-- Read access to orders and order_items:
+
+CREATE ROLE sales_analyst_role;
+
+GRANT USAGE ON SCHEMA PUBLIC 
+TO sales_analyst_role;
+
+GRANT SELECT
+ON TABLE orders,order_items
+TO sales_analyst_role;
+
+-- Scenario 8 — Inventory Manager
+-- Full access to products
+
+CREATE ROLE inventory_manager_role;
+
+GRANT USAGE ON SCHEMA PUBLIC 
+TO  inventory_manager_role;
+
+GRANT SELECT,INSERT,UPDATE,DELETE
+ON TABLE products
+TO inventory_manager_role;
+
+-- Scenario 9 — Finance Manager
+-- Read and update orders
+
+CREATE ROLE finance_manager_role;
+
+GRANT USAGE ON SCHEMA PUBLIC 
+TO finance_manager_role;
+
+GRANT SELECT,UPDATE
+ON TABLE orders
+TO finance_manager_role;
+
+-- Scenario 10 — Backup Operator
+CREATE ROLE backup_operator_role;
+
+GRANT CONNECT
+ON DATABASE "OnlineRetailDB_Test"
+TO backup_operator_role;
+
+-- Scenario 11 — Restricted Read Access
+-- Only allow FirstName, LastName, and Email:
+
+CREATE ROLE restricted_read_role;
+
+GRANT USAGE ON SCHEMA PUBLIC 
+TO restricted_read_role;
+
+GRANT SELECT(first_name,last_name,email)
+ON TABLE customers
+TO restricted_read_role;
+
+
+ -- Scenario 14 — Temporary Access
+
+ CREATE ROLE temporary_access_role;
+
+ GRANT USAGE  ON SCHEMA public 
+ TO temporary_access_role ;
+
+ GRANT SELECT 
+ ON ALL TABLES  IN SCHEMA PUBLIC
+ TO temporary_access_role;
+-- then we can revoke like 
+
+REVOKE SELECT 
+ON ALL TABLES IN  SCHEMA PUBLIC
+FROM temporary_access_role;
+
+-- Scenario 15 — Application Role
+
+CREATE ROLE application_role
+LOGIN 
+PASSWORD 'strong';
+
+
+GRANT CONNECT
+ON DATABASE "OnlineRetailDB_Test"
+TO application_role;
+
+GRANT USAGE ON SCHEMA PUBLIC 
+TO application_role;
+
+-- THEN GIVING SOME ROLE TO IT 
+GRANT product_manager_role 
+TO application_role;
