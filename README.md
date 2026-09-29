@@ -407,32 +407,20 @@ Online-Retail-Database/
 
 ---
 
-# Key Concepts Practiced
+# Project Coverage
 
-Through this project, I practiced:
-
-* Relational database design
-* Database normalization concepts
-* Primary and foreign keys
-* Data integrity constraints
-* SQL querying
-* Aggregation
-* Joins
-* Subqueries
-* CTEs
-* Window functions
-* SQL Views
-* PL/pgSQL
-* Database triggers
-* Audit logging
-* Indexing
-* `EXPLAIN ANALYZE`
-* Table clustering
-* PostgreSQL roles
-* RBAC
-* `GRANT`
-* `REVOKE`
-* Column-level permissions
-* Database backup and restore
-
----
+| Area                      | Topics Covered                                                                                         |
+| ------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Customer Analysis         | Customer order history, active customers, inactive customers, customer spending, customer distribution |
+| Sales Analysis            | Product sales, category revenue, order value, customer spending                                        |
+| Product Analysis          | Product sales, product frequency, pricing, highest-priced products                                     |
+| Inventory                 | Stock availability, out-of-stock products, low-stock products                                          |
+| Order Analysis            | Order history, recent orders, high-value orders, order frequency                                       |
+| Category Analysis         | Category popularity, average prices, category revenue                                                  |
+| Database Design           | Tables, primary keys, foreign keys, constraints, identity columns                                      |
+| Database Auditing         | ChangeLog table, audit functions, audit triggers                                                       |
+| Database Views            | Product details, customer orders, recent orders                                                        |
+| Performance               | Indexes, clustering, `EXPLAIN ANALYZE`                                                                 |
+| Advanced SQL              | Subqueries, CTEs, window functions, `ROW_NUMBER()`, `RANK()`                                           |
+| Security & Access Control | Roles, users, `GRANT`, `REVOKE`, role inheritance, column-level permissions                            |
+| PostgreSQL Features       | Functions, triggers, views, indexes, database roles                                                    |
