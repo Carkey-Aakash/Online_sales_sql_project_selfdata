@@ -290,6 +290,159 @@ The project uses `EXPLAIN ANALYZE` to inspect how PostgreSQL executes queries be
 
 ---
 
+
+# Role-Based Access Control (RBAC)
+
+The project includes practical PostgreSQL **Role-Based Access Control** exercises.
+
+The RBAC section demonstrates how users and permission roles can be separated to control access to database objects.
+
+The basic workflow includes:
+
+1. Create login roles
+2. Allow users to connect to the database
+3. Create permission roles
+4. Grant schema access
+5. Grant table permissions
+6. Assign permission roles to users
+7. Revoke permissions
+8. Check effective permissions
+
+For example:
+
+```sql
+CREATE ROLE sales_user
+LOGIN
+PASSWORD 'strongpassword';
+```
+
+A separate permission role can then be created:
+
+```sql
+CREATE ROLE sale_role;
+```
+
+And permissions can be assigned to the permission role:
+
+```sql
+GRANT SELECT
+ON TABLE customers
+TO sale_role;
+```
+
+The user can then be assigned to that role:
+
+```sql
+GRANT sale_role
+TO sales_user;
+```
+
+This role-based approach is demonstrated in the SQL implementation.
+
+---
+
+# RBAC Scenarios
+
+The project also contains multiple practical access-control scenarios.
+
+### Scenario 1 — Read-Only Access
+
+A role with `SELECT` access to all tables.
+
+### Scenario 2 — Data Entry Clerk
+
+Allows inserting data into selected tables such as:
+
+* `categories`
+* `order_items`
+
+### Scenario 3 — Product Manager
+
+Provides CRUD access to:
+
+* `products`
+* `categories`
+
+### Scenario 4 — Order Processor
+
+Provides `SELECT` and `UPDATE` access to:
+
+* `orders`
+
+### Scenario 5 — Customer Support
+
+Provides read access to:
+
+* `customers`
+* `orders`
+
+### Scenario 6 — Marketing Analyst
+
+Provides read-only access to all tables.
+
+### Scenario 7 — Sales Analyst
+
+Provides read access to:
+
+* `orders`
+* `order_items`
+
+### Scenario 8 — Inventory Manager
+
+Provides CRUD access to:
+
+* `products`
+
+### Scenario 9 — Finance Manager
+
+Provides `SELECT` and `UPDATE` access to:
+
+* `orders`
+
+### Scenario 10 — Backup Operator
+
+Demonstrates database connection permission for a backup-related role.
+
+### Scenario 11 — Restricted Read Access
+
+Demonstrates **column-level permissions** by allowing access only to selected customer columns:
+
+```sql
+GRANT SELECT(first_name,last_name,email)
+ON TABLE customers
+TO restricted_read_role;
+```
+
+### Scenario 14 — Temporary Access
+
+Demonstrates granting access and later revoking it.
+
+### Scenario 15 — Application Role
+
+Creates a login role for an application and assigns an existing permission role to it.
+
+## The SQL file contains these RBAC scenarios as practical exercises in PostgreSQL access control.
+
+# Permission Verification
+
+The project also demonstrates checking effective permissions using PostgreSQL privilege functions.
+
+Example:
+
+```sql
+SELECT
+    has_table_privilege(
+        current_user,
+        'public.customers',
+        'SELECT'
+    ) AS customers_select;
+```
+
+Permissions for different tables and operations are checked using `has_table_privilege()`.
+
+---
+
+
 # Technologies Used
 
 | Technology              | Purpose                                   |
