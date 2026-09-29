@@ -14,6 +14,8 @@
 
 This project is an **intermediate-level PostgreSQL database project** built around an online retail business.
 
+<img width="1536" height="1024" alt="Image" src="https://github.com/user-attachments/assets/412d8cd3-83bb-4b64-b8e8-d3cf6aece521" />
+
 The project goes beyond basic SQL queries and covers the complete process of building and working with a relational database, including database design, data analysis, database auditing, SQL Views, indexing, query-performance analysis, Role-Based Access Control (RBAC), and database backup and restore.
 
 The database models key components of an online retail system, including:
