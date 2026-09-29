@@ -375,7 +375,18 @@ The backup and restore process was used to verify that the database can be recre
 
 ---
 
+# Project Structure
 
+```text
+Online-Retail-Database/
+│
+├── onlinesalesdb.sql
+│
+├── Business_Questions/
+│   └── BUSINESS_QUESTIONS.md
+│
+└── README.md
+```
 
 # Technologies Used
 
@@ -384,12 +395,44 @@ The backup and restore process was used to verify that the database can be recre
 | **PostgreSQL**          | Relational database management system     |
 | **SQL**                 | Data querying and analysis                |
 | **PL/pgSQL**            | Trigger functions and database-side logic |
-| **PostgreSQL Triggers** | Automated audit logging                   |
+| **PostgreSQL Triggers** | Automated database auditing               |
 | **SQL Views**           | Reusable queries and summarized data      |
 | **Indexes**             | Query performance exploration             |
 | **EXPLAIN ANALYZE**     | Query execution analysis                  |
 | **CLUSTER**             | Table organization experiment             |
+| **RBAC**                | Database access control                   |
+| **GRANT / REVOKE**      | Permission management                     |
+| **pgAdmin**             | PostgreSQL database administration        |
 | **Git / GitHub**        | Version control and project portfolio     |
 
+---
 
-## The implemented SQL specifically
+# Key Concepts Practiced
+
+Through this project, I practiced:
+
+* Relational database design
+* Database normalization concepts
+* Primary and foreign keys
+* Data integrity constraints
+* SQL querying
+* Aggregation
+* Joins
+* Subqueries
+* CTEs
+* Window functions
+* SQL Views
+* PL/pgSQL
+* Database triggers
+* Audit logging
+* Indexing
+* `EXPLAIN ANALYZE`
+* Table clustering
+* PostgreSQL roles
+* RBAC
+* `GRANT`
+* `REVOKE`
+* Column-level permissions
+* Database backup and restore
+
+---
